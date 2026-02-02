@@ -28,15 +28,16 @@ Test Page Load Successfully
 
 *** Keywords ***
 Open Browser To Computing Page
-    ${options}=    Evaluate    ChromeOptions()    modules=selenium.webdriver
+    ${options}=    Evaluate    selenium.webdriver.ChromeOptions()    modules=selenium
     Call Method    ${options}    add_argument    --no-sandbox
     Call Method    ${options}    add_argument    --disable-dev-shm-usage
     Call Method    ${options}    add_argument    --headless=new
     Call Method    ${options}    add_argument    --disable-gpu
 
-    ${service}=    Evaluate    Service("/usr/bin/chromedriver")    modules=selenium.webdriver.chrome.service
+    ${service}=    Evaluate    selenium.webdriver.chrome.service.Service("/usr/bin/chromedriver")    modules=selenium
     Create Webdriver    Chrome    options=${options}    service=${service}
 
     Go To    ${URL}
     Wait Until Page Contains Element    xpath=//body    timeout=10s
+
 
