@@ -22,6 +22,10 @@ Open Browser To Computing Page
     Call Method    ${chrome_options}    add_argument    --no-sandbox
     Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
     Call Method    ${chrome_options}    add_argument    --headless
-    Create Webdriver    Chrome    options=${chrome_options}
+
+    ${service}=    Evaluate    sys.modules['selenium.webdriver.chrome.service'].Service("/usr/bin/chromedriver")    sys
+    Create Webdriver    Chrome    options=${chrome_options}    service=${service}
+
     Go To    ${URL}
     Wait Until Page Contains Element    xpath=//body    timeout=10s
+
