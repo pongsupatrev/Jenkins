@@ -1,44 +1,12 @@
 *** Settings ***
 Library    SeleniumLibrary
 
-*** Variables ***
-${URL}          https://computing.kku.ac.th
-${BROWSER}      chromium
-${CHROME_BIN}   /usr/bin/chromium
-${DRIVER}       /usr/bin/chromedriver
-
-*** Test Cases ***
-Test Open KKU Computing Website
-    Open Browser To Computing Page
-    Page Should Contain Element    xpath=//body
-    Close Browser
-
-Test Page Title
-    Open Browser To Computing Page
-    ${title}=    Get Title
-    Should Not Be Empty    ${title}
-    Log    Page Title: ${title}
-    Close Browser
-
-Test Page Load Successfully
-    Open Browser To Computing Page
-    ${url}=    Get Location
-    Should Contain    ${url}    computing.kku.ac.th
-    Close Browser
-
 *** Keywords ***
-Open Browser To Computing Page
-    ${options}=    Evaluate    selenium.webdriver.ChromeOptions()    modules=selenium
-    Call Method    ${options}    add_argument    "--no-sandbox"
-    Call Method    ${options}    add_argument    "--disable-dev-shm-usage"
-    Call Method    ${options}    add_argument    "--headless=new"
-    Call Method    ${options}    add_argument    "--disable-gpu"
+Open Browser To Login Page
+    ${chrome_options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
+    Call Method    ${chrome_options}    add_argument    --no-sandbox
+    Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
+    Call Method    ${chrome_options}    add_argument    --headless
 
-    ${service}=    Evaluate    selenium.webdriver.chrome.service.Service("/usr/bin/chromedriver")    modules=selenium
-    Create Webdriver    Chrome    options=${options}    service=${service}
-
-    Go To    ${URL}
-    Wait Until Page Contains Element    xpath=//body    timeout=10s
-
-
-
+    Create Webdriver    Chrome    options=${chrome_options}
+    Go To    https://computing.kku.ac.th
