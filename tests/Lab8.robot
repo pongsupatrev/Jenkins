@@ -28,17 +28,15 @@ Test Page Load Successfully
 
 *** Keywords ***
 Open Browser To Computing Page
-    ${opts}=    Create List
-    ...    --headless=new
-    ...    --no-sandbox
-    ...    --disable-dev-shm-usage
-    ...    --disable-gpu
+    ${options}=    Evaluate    ChromeOptions()    modules=selenium.webdriver
+    Call Method    ${options}    add_argument    --no-sandbox
+    Call Method    ${options}    add_argument    --disable-dev-shm-usage
+    Call Method    ${options}    add_argument    --headless=new
+    Call Method    ${options}    add_argument    --disable-gpu
 
-    Create Webdriver
-    ...    Chrome
-    ...    executable_path=${DRIVER}
-    ...    options=add_argument=${opts}
-    ...    binary_location=${CHROME_BIN}
+    ${service}=    Evaluate    Service("/usr/bin/chromedriver")    modules=selenium.webdriver.chrome.service
+    Create Webdriver    Chrome    options=${options}    service=${service}
 
     Go To    ${URL}
-    Wait Until Page Contains Element    xpath=//body    timeout=20s
+    Wait Until Page Contains Element    xpath=//body    timeout=10s
+
